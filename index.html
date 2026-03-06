@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DFD Studio — Sales Order System</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060d1f;--surf:#0d1530;--surf2:#0f1d3c;--brd:#1e2d5a;
+  --tx:#dde6f0;--muted:#5a7099;
+  --M:#38bdf8;--O:#fbbf24;--H:#a78bfa;
+  --ac:#38bdf8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--tx);font-family:'JetBrains Mono',monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* TOP BAR */
+#topbar{background:var(--surf);border-bottom:1px solid var(--brd);height:52px;display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;flex-wrap:nowrap;overflow:hidden;}
+.logo{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;white-space:nowrap;margin-right:4px;}
+.logo span{color:var(--M);}
+.ptabs{display:flex;gap:3px;flex-shrink:0;}
+.ptab{padding:4px 11px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .2s;background:transparent;font-family:inherit;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;}
+.ptab[data-p="Mostafa"]{color:var(--M);border-color:#38bdf833;}
+.ptab[data-p="Mostafa"].on{background:#38bdf822;border-color:var(--M);}
+.ptab[data-p="Omar"]{color:var(--O);border-color:#fbbf2433;}
+.ptab[data-p="Omar"].on{background:#fbbf2422;border-color:var(--O);}
+.ptab[data-p="Mahmoud"]{color:var(--H);border-color:#a78bfa33;}
+.ptab[data-p="Mahmoud"].on{background:#a78bfa22;border-color:var(--H);}
+.sep{width:1px;height:22px;background:var(--brd);flex-shrink:0;}
+.topbtn{padding:4px 11px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid;transition:all .2s;background:transparent;font-family:inherit;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.tb-all0{color:var(--O);border-color:#fbbf2444;}
+.tb-all0.on{background:#fbbf2418;border-color:var(--O);}
+.tb-all1{color:var(--H);border-color:#a78bfa44;}
+.tb-all1.on{background:#a78bfa18;border-color:var(--H);}
+.tb-fin0{color:#4ade80;border-color:#4ade8044;}
+.tb-fin0.on{background:#4ade8018;border-color:#4ade80;}
+.tb-fin1{color:#f87171;border-color:#f8717144;}
+.tb-fin1.on{background:#f8717118;border-color:#f87171;}
+
+/* TOOLBAR */
+#toolbar{background:var(--surf2);border-bottom:1px solid var(--brd);height:44px;display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;}
+#fr-tabs{display:flex;gap:5px;flex:1;overflow:hidden;}
+.frtab{padding:4px 11px;border-radius:3px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--brd);color:var(--muted);background:transparent;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.frtab.on{border-color:var(--ac);color:var(--ac);background:var(--ac)18;}
+.lvl{display:flex;border:1px solid var(--brd);border-radius:4px;overflow:hidden;flex-shrink:0;}
+.lvl button{padding:4px 13px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--muted);font-family:inherit;transition:all .15s;}
+.lvl button.on{background:var(--surf);color:var(--tx);}
+
+/* SINGLE VIEW */
+#single-view{display:flex;flex:1;overflow:hidden;}
+#canvas{flex:1;display:flex;flex-direction:column;padding:14px;gap:10px;overflow:hidden;}
+#dh h2{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;}
+#dh p{font-size:10px;color:var(--muted);margin-top:2px;}
+#svgwrap{flex:1;background:var(--surf2);border:1px solid var(--brd);border-radius:8px;overflow:hidden;}
+#svgwrap svg{width:100%;height:100%;}
+/* STEP PANEL */
+#spanel{width:298px;border-left:1px solid var(--brd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+#sh{padding:13px;border-bottom:1px solid var(--brd);background:var(--surf);flex-shrink:0;}
+#sh h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;margin-bottom:3px;}
+#sh .prog-txt{font-size:10px;color:var(--muted);}
+.pbar{height:3px;background:var(--brd);border-radius:2px;margin-top:7px;overflow:hidden;}
+#pfill{height:100%;border-radius:2px;transition:width .4s;background:var(--O);}
+#sbody{flex:1;overflow-y:auto;padding:14px;}
+#sbody::-webkit-scrollbar{width:3px;}
+#sbody::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px;}
+.scard{background:var(--surf);border:1px solid var(--brd);border-radius:8px;margin-bottom:10px;animation:fadeIn .3s ease;overflow:hidden;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.scard-top{padding:11px 13px 9px;border-bottom:1px solid var(--brd);}
+.scard-body{padding:11px 13px 13px;}
+.snum{font-size:9px;font-weight:700;color:var(--O);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;}
+.sname{font-size:12px;font-weight:700;color:#fff;line-height:1.4;}
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:3px;font-size:9px;font-weight:700;margin-bottom:8px;}
+.b-E{background:#162742;border:1px solid #38bdf8;color:#38bdf8;}
+.b-P{background:#0b2415;border:1px solid #4ade80;color:#4ade80;}
+.b-S{background:#1d1035;border:1px solid #a78bfa;color:#a78bfa;}
+.b-F{background:#1a2230;border:1px solid #6b82a8;color:#6b82a8;}
+.b-I{background:#1a1a10;border:1px solid var(--O);color:var(--O);}
+.stxt{font-size:10px;color:#8ba3c0;line-height:1.7;}
+.svisual{width:100%;height:64px;border-radius:5px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;}
+.sv-process{border-radius:50%;width:54px;height:54px;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;text-align:center;line-height:1.3;font-family:'JetBrains Mono',monospace;}
+.sv-entity{border-radius:3px;width:110px;height:34px;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:600;text-align:center;font-family:'JetBrains Mono',monospace;}
+.sv-store{width:120px;height:26px;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:600;text-align:center;font-family:'JetBrains Mono',monospace;position:relative;}
+.sv-store::before,.sv-store::after{content:'';position:absolute;left:0;right:0;height:1.5px;background:#a78bfa;}
+.sv-store::before{top:0;}.sv-store::after{bottom:0;}
+.sv-flow{display:flex;align-items:center;gap:6px;font-size:8.5px;color:#6b82a8;font-family:'JetBrains Mono',monospace;}
+.sv-arrow{flex:1;height:2px;background:#6b82a8;position:relative;min-width:30px;}
+.sv-arrow::after{content:'';position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left:7px solid #6b82a8;}
+.srule{background:#0d1530;border-radius:5px;padding:8px 10px;margin-top:8px;border-left:2px solid var(--ac);}
+.srule-lbl{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.srule-txt{font-size:9.5px;color:#6b82a8;line-height:1.6;}
+.sflow-detail{background:#0a1628;border-radius:5px;padding:8px 10px;margin-top:8px;display:flex;flex-direction:column;gap:4px;}
+.sfd-row{display:flex;align-items:flex-start;gap:6px;font-size:9.5px;color:#8ba3c0;line-height:1.5;}
+.sfd-lbl{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;margin-top:1px;}
+#legend{padding:11px 14px;border-top:1px solid var(--brd);background:var(--surf);flex-shrink:0;}
+.ltitle{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
+.litems{display:flex;flex-direction:column;gap:4px;}
+.li{display:flex;align-items:center;gap:8px;font-size:9px;color:#8ba3c0;}
+.lrect{width:22px;height:12px;border:1.5px solid #38bdf8;background:#162742;flex-shrink:0;}
+.lcirc{width:14px;height:14px;border-radius:50%;border:1.5px solid #4ade80;background:#0b2415;flex-shrink:0;}
+.lsto{width:22px;height:10px;border-top:1.5px solid #a78bfa;border-bottom:1.5px solid #a78bfa;flex-shrink:0;}
+.larr{width:22px;height:2px;background:#6b82a8;flex-shrink:0;position:relative;}
+.larr::after{content:'';position:absolute;right:-1px;top:-3px;border:4px solid transparent;border-left:6px solid #6b82a8;}
+#navrow{padding:10px 14px;border-top:1px solid var(--brd);display:flex;gap:7px;align-items:center;flex-shrink:0;}
+.nbtn{padding:6px 12px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--brd);background:var(--surf);color:var(--tx);font-family:inherit;transition:all .15s;}
+.nbtn:hover:not(:disabled){border-color:var(--O);color:var(--O);}
+.nbtn.pri{background:#fbbf2422;border-color:var(--O);color:var(--O);}
+.nbtn:disabled{opacity:.35;cursor:not-allowed;}
+.nbtn.reset{flex:1;text-align:center;}
+
+/* ALL VIEW */
+#all-view{display:none;flex:1;overflow-y:auto;padding:16px;flex-direction:column;gap:14px;}
+#all-view::-webkit-scrollbar{width:5px;}
+#all-view::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px;}
+.all-header h2{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;}
+.all-header p{font-size:11px;color:var(--muted);}
+.person-section{margin-bottom:4px;}
+.psec-label{display:flex;align-items:center;gap:10px;margin-bottom:10px;margin-top:16px;}
+.psec-label span{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;}
+.psec-line{flex:1;height:1px;background:var(--brd);}
+.grid{display:grid;gap:12px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.mini-card{background:var(--surf2);border:1px solid var(--brd);border-radius:8px;overflow:hidden;transition:border-color .2s,transform .15s;cursor:pointer;}
+.mini-card:hover{transform:translateY(-2px);}
+.mini-top{padding:7px 10px 3px;display:flex;align-items:center;gap:7px;}
+.mini-id{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;}
+.mini-title{font-size:10px;font-weight:600;color:#dde6f0;flex:1;line-height:1.3;}
+.mini-by{padding:3px 10px 7px;font-size:9px;color:var(--muted);}
+
+/* FINAL VIEW */
+#final-view{display:none;flex:1;overflow:hidden;}
+#fv-body{display:flex;flex:1;overflow:hidden;}
+#fv-wrap{flex:1;overflow:hidden;position:relative;background:var(--bg);}
+#fv-svg{width:100%;height:100%;cursor:grab;display:block;}
+#fv-svg.dragging{cursor:grabbing;}
+#fv-controls{position:absolute;bottom:14px;right:14px;display:flex;gap:6px;}
+.zc{width:30px;height:30px;background:var(--surf);border:1px solid var(--brd);border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--tx);user-select:none;transition:border-color .15s;}
+.zc:hover{border-color:var(--O);color:var(--O);}
+#fv-legend{position:absolute;bottom:14px;left:14px;background:var(--surf);border:1px solid var(--brd);border-radius:6px;padding:10px 13px;}
+#fv-hints-overlay{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:9px;color:#5a709988;pointer-events:none;font-family:'JetBrains Mono',monospace;}
+.fvl-title{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.fvl-items{display:flex;flex-direction:column;gap:3px;}
+.fvli{display:flex;align-items:center;gap:6px;font-size:9px;color:#8ba3c0;}
+.dot-M{width:10px;height:10px;border-radius:50%;background:#38bdf822;border:1.5px solid #38bdf8;flex-shrink:0;}
+.dot-O{width:10px;height:10px;border-radius:50%;background:#fbbf2422;border:1.5px solid #fbbf24;flex-shrink:0;}
+.dot-H{width:10px;height:10px;border-radius:50%;background:#a78bfa22;border:1.5px solid #a78bfa;flex-shrink:0;}
+/* FINAL STEP PANEL */
+#fspanel{width:298px;border-left:1px solid var(--brd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+#fsh{padding:13px;border-bottom:1px solid var(--brd);background:var(--surf);flex-shrink:0;}
+#fsh h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;margin-bottom:3px;}
+#fsh-person-tabs{display:flex;gap:4px;margin-top:9px;}
+.fpbtab{flex:1;padding:4px 6px;border-radius:4px;font-size:9px;font-weight:700;cursor:pointer;border:1px solid var(--brd);color:var(--muted);background:transparent;font-family:inherit;letter-spacing:.3px;text-transform:uppercase;transition:all .15s;}
+.fpbtab[data-fp="Mostafa"].on{background:#38bdf818;border-color:#38bdf8;color:#38bdf8;}
+.fpbtab[data-fp="Omar"].on{background:#fbbf2418;border-color:#fbbf24;color:#fbbf24;}
+.fpbtab[data-fp="Mahmoud"].on{background:#a78bfa18;border-color:#a78bfa;color:#a78bfa;}
+#fsbody{flex:1;overflow-y:auto;padding:14px;}
+#fsbody::-webkit-scrollbar{width:3px;}
+#fsbody::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px;}
+#fsnavrow{padding:10px 14px;border-top:1px solid var(--brd);display:flex;gap:7px;align-items:center;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo">DFD <span>Studio</span></div>
+  <div class="ptabs" id="ptabs">
+    <button class="ptab on" data-p="Mostafa">Mostafa · FR1–4</button>
+    <button class="ptab" data-p="Omar">Omar · FR5–7</button>
+    <button class="ptab" data-p="Mahmoud">Mahmoud · FR8–10</button>
+  </div>
+  <div class="sep"></div>
+  <button class="topbtn tb-all0" id="btn-all0" onclick="setMode('all0')">⊞ All L0</button>
+  <button class="topbtn tb-all1" id="btn-all1" onclick="setMode('all1')">⊞ All L1</button>
+  <div class="sep"></div>
+  <button class="topbtn tb-fin0" id="btn-fin0" onclick="setMode('fin0')">◈ Final L0</button>
+  <button class="topbtn tb-fin1" id="btn-fin1" onclick="setMode('fin1')">◈ Final L1</button>
+</div>
+
+<div id="toolbar">
+  <div id="fr-tabs"></div>
+  <div class="lvl">
+    <button id="bl0" class="on" onclick="setLevel(0)">Level 0</button>
+    <button id="bl1" onclick="setLevel(1)">Level 1</button>
+  </div>
+</div>
+
+<!-- SINGLE FR -->
+<div id="single-view">
+  <div id="canvas">
+    <div id="dh"><h2 id="dtitle"></h2><p id="dsub"></p></div>
+    <div id="svgwrap">
+      <svg id="dfd" viewBox="0 0 800 440" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+  <div id="spanel">
+    <div id="sh">
+      <h3>Step-by-Step Guide</h3>
+      <div class="prog-txt" id="ptxt">Step 0 of 0</div>
+      <div class="pbar"><div id="pfill" style="width:0%"></div></div>
+    </div>
+    <div id="sbody"></div>
+    <div id="legend">
+      <div class="ltitle">DFD Notation</div>
+      <div class="litems">
+        <div class="li"><div class="lrect"></div>External Entity</div>
+        <div class="li"><div class="lcirc"></div>Process (Circle)</div>
+        <div class="li"><div class="lsto"></div>Data Store</div>
+        <div class="li"><div class="larr"></div>Data Flow</div>
+      </div>
+    </div>
+    <div id="navrow">
+      <button class="nbtn" id="bprev" onclick="nav(-1)" disabled>← Prev</button>
+      <button class="nbtn reset" onclick="showAll()">Show All</button>
+      <button class="nbtn pri" id="bnext" onclick="nav(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ALL FRs GRID -->
+<div id="all-view"></div>
+
+<!-- FINAL UNIFIED DFD -->
+<div id="final-view">
+  <div id="fv-body">
+    <div id="fv-wrap">
+      <svg id="fv-svg" viewBox="0 0 1800 900"></svg>
+      <div id="fv-controls">
+        <div class="zc" onclick="zoomFinal(1.2)">+</div>
+        <div class="zc" onclick="zoomFinal(0.8)">-</div>
+        <div class="zc" onclick="resetFinal()" style="font-size:11px">&#x22A1;</div>
+      </div>
+      <div id="fv-legend">
+        <div class="fvl-title">Assigned To</div>
+        <div class="fvl-items">
+          <div class="fvli"><div class="dot-M"></div>Mostafa - FR1-FR4</div>
+          <div class="fvli"><div class="dot-O"></div>Omar - FR5-FR7</div>
+          <div class="fvli"><div class="dot-H"></div>Mahmoud - FR8-FR10</div>
+        </div>
+      </div>
+      <div id="fv-hints-overlay">Scroll to zoom · Drag to pan</div>
+    </div>
+    <div id="fspanel">
+      <div id="fsh">
+        <h3 id="fsh-title">Step-by-Step Guide</h3>
+        <div class="prog-txt" id="fptxt">Step 0 of 0</div>
+        <div class="pbar"><div id="fpfill" style="width:0%"></div></div>
+        <div id="fsh-person-tabs">
+          <button class="fpbtab on" data-fp="Mostafa" onclick="setFinalPerson('Mostafa')">Mostafa</button>
+          <button class="fpbtab" data-fp="Omar" onclick="setFinalPerson('Omar')">Omar</button>
+          <button class="fpbtab" data-fp="Mahmoud" onclick="setFinalPerson('Mahmoud')">Mahmoud</button>
+        </div>
+      </div>
+      <div id="fsbody"></div>
+      <div id="fsnavrow">
+        <button class="nbtn" id="fbprev" onclick="fnav(-1)" disabled>&#x2190; Prev</button>
+        <button class="nbtn reset" onclick="fshowAll()">Show All</button>
+        <button class="nbtn pri" id="fbnext" onclick="fnav(1)">Next &#x2192;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── INDIVIDUAL FR DATA ────────────────────────────────────────────────────────
+const n=(id,t,x,y,lb)=>({id,type:t,x,y,label:lb});
+const e=(id,fr,to,lb)=>({id,from:fr,to,label:lb});
+const DATA={
+FR1:{title:'Multi-Channel Order Receipt',person:'Mostafa',
+  level0:{nodes:[n('p0','P',400,220,'1.0\nOrder Receipt'),n('e1','E',135,100,'Customer'),n('e2','E',135,345,'Call Centre\nStaff'),n('e3','E',665,100,'OMS'),n('e4','E',665,345,'Mobile App')],edges:[e('f1','e1','p0','Web Order'),e('f2','e2','p0','Phone Order'),e('f3','e4','p0','Mobile Order'),e('f4','p0','e3','Validated Order'),e('f5','e3','p0','Confirmation')]},
+  level1:{nodes:[n('e1','E',80,215,'Customer'),n('p1','P',265,100,'1.1 Capture\nWeb Order'),n('p2','P',265,220,'1.2 Capture\nMobile Order'),n('p3','P',265,355,'1.3 Manual\nEntry'),n('s1','S',510,220,'D1 | Order Database'),n('e2','E',700,220,'OMS')],edges:[e('f1','e1','p1','Web Request'),e('f2','e1','p2','Mobile Request'),e('f3','e1','p3','Phone Details'),e('f4','p1','s1','Order Data'),e('f5','p2','s1','Order Data'),e('f6','p3','s1','Order Data'),e('f7','s1','e2','Validated Orders')]}},
+FR2:{title:'Sales Order Generation',person:'Mostafa',
+  level0:{nodes:[n('p0','P',400,220,'2.0\nSales Order\nGeneration'),n('e1','E',135,100,'OMS / Customer'),n('e2','E',665,100,'Inventory DB'),n('e3','E',135,345,'Warehouse Mgr'),n('e4','E',665,345,'Customer')],edges:[e('f1','e1','p0','Purchase Order'),e('f2','p0','e2','Stock Query'),e('f3','e2','p0','Stock Status'),e('f4','p0','e3','Sales Order'),e('f5','p0','e4','Confirmation')]},
+  level1:{nodes:[n('e1','E',80,160,'OMS Input'),n('p1','P',280,160,'2.1 Verify\nStock'),n('s1','S',510,100,'D1 | Inventory DB'),n('p2','P',510,240,'2.2 Generate\nSales Order'),n('s2','S',280,360,'D2 | Orders DB'),n('p3','P',680,160,'2.3 Send\nNotification'),n('e2','E',700,310,'Warehouse Mgr')],edges:[e('f1','e1','p1','Purchase Order'),e('f2','p1','s1','Stock Query'),e('f3','s1','p1','Stock Level'),e('f4','p1','p2','Stock Confirmed'),e('f5','p2','s2','Sales Order'),e('f6','p2','p3','Order Details'),e('f7','p3','e2','Sales Order')]}},
+FR3:{title:'Inventory Management',person:'Mostafa',
+  level0:{nodes:[n('p0','P',400,220,'3.0\nInventory\nManagement'),n('e1','E',135,100,'Warehouse\nStaff'),n('e2','E',665,100,'Procurement\nTeam'),n('e3','E',135,345,'Inventory\nSystem'),n('e4','E',665,345,'Management')],edges:[e('f1','e1','p0','Stock Movement'),e('f2','p0','e1','Updated Stock'),e('f3','p0','e2','Reorder Alert'),e('f4','p0','e3','Stock Update'),e('f5','p0','e4','Stock Report')]},
+  level1:{nodes:[n('e1','E',80,160,'Warehouse\nStaff'),n('p1','P',280,160,'3.1 Update\nStock'),n('s1','S',510,160,'D1 | Inventory DB'),n('p2','P',280,320,'3.2 Monitor\nThresholds'),n('p3','P',510,320,'3.3 Generate\nReports'),n('e2','E',700,160,'Procurement'),n('e3','E',700,320,'Management')],edges:[e('f1','e1','p1','Movement Data'),e('f2','p1','s1','Stock Update'),e('f3','s1','p2','Current Levels'),e('f4','p2','e2','Reorder Alert'),e('f5','s1','p3','Stock Data'),e('f6','p3','e3','Stock Report')]}},
+FR4:{title:'Warehouse Picking',person:'Mostafa',
+  level0:{nodes:[n('p0','P',400,220,'4.0\nPicking\nOperations'),n('e1','E',135,100,'WMS'),n('e2','E',665,100,'Warehouse\nStaff'),n('e3','E',135,345,'Inventory\nSystem'),n('e4','E',665,345,'Barcode/RFID')],edges:[e('f1','e1','p0','Sales Order'),e('f2','p0','e2','Pick List'),e('f3','e2','p0','Scan Confirm'),e('f4','e4','p0','Scanned Item'),e('f5','p0','e3','Stock Deduction')]},
+  level1:{nodes:[n('e1','E',80,160,'WMS'),n('p3','P',270,320,'4.3 Batch/Zone\nPicking'),n('p1','P',270,160,'4.1 Generate\nPick List'),n('e2','E',80,320,'Warehouse\nStaff'),n('p2','P',510,240,'4.2 Scan &\nConfirm Pick'),n('s1','S',700,240,'D1 | Inventory DB')],edges:[e('f1','e1','p1','Sales Order'),e('f2','p3','p1','Zone Strategy'),e('f3','p1','e2','Pick List'),e('f4','e2','p2','Scan Data'),e('f5','p2','s1','Stock Update'),e('f6','e1','p3','Batch Config')]}},
+FR5:{title:'Sorting & Packing',person:'Omar',
+  level0:{nodes:[n('p0','P',400,220,'5.0\nSorting &\nPacking'),n('e1','E',135,100,'Warehouse\nStaff'),n('e2','E',665,100,'Order DB'),n('e3','E',135,345,'Logistics\nSystem'),n('e4','E',665,345,'Customer')],edges:[e('f1','e1','p0','Picked Items'),e('f2','e2','p0','Order Details'),e('f3','p0','e1','Pack Instructions'),e('f4','p0','e3','Labelled Package'),e('f5','p0','e4','Packing Confirm')]},
+  level1:{nodes:[n('e1','E',80,160,'Warehouse\nStaff'),n('s1','S',270,360,'D1 | Order DB'),n('p1','P',280,160,'5.1 Sort\nby Order'),n('p2','P',510,100,'5.2 Recommend\nPackaging'),n('p3','P',510,280,'5.3 Generate\nLabels'),n('e2','E',700,180,'Logistics\nSystem')],edges:[e('f1','e1','p1','Picked Batch'),e('f2','s1','p1','Order Details'),e('f3','p1','p2','Sorted Items'),e('f4','p2','e1','Packaging Guide'),e('f5','p1','p3','Order Info'),e('f6','p3','e2','Packing Slip+Label')]}},
+FR6:{title:'Shipping & Logistics',person:'Omar',
+  level0:{nodes:[n('p0','P',400,220,'6.0\nShipping\nManagement'),n('e1','E',135,100,'Warehouse'),n('e2','E',665,100,'Logistics\nPartner'),n('e3','E',135,345,'Customer'),n('e4','E',665,345,'Carrier API')],edges:[e('f1','e1','p0','Packed Order'),e('f2','p0','e2','Pickup Request'),e('f3','e2','p0','Tracking ID'),e('f4','p0','e3','Tracking Info'),e('f5','p0','e4','Rate Query')]},
+  level1:{nodes:[n('e1','E',80,160,'Warehouse'),n('p1','P',280,130,'6.1 Schedule\nPickup'),n('p3','P',280,330,'6.3 Calculate\nCosts'),n('p2','P',510,220,'6.2 Track\nShipment'),n('s1','S',510,380,'D1 | Carrier API'),n('e2','E',700,130,'Logistics\nPartner'),n('e3','E',700,330,'Customer')],edges:[e('f1','e1','p1','Dispatch Request'),e('f2','p1','s1','API Call'),e('f3','s1','p1','Tracking ID'),e('f4','p1','e2','Pickup Confirm'),e('f5','p2','e3','Tracking Update'),e('f6','e1','p3','Order Dims'),e('f7','s1','p3','Rates')]}},
+FR7:{title:'Invoice & Payment',person:'Omar',
+  level0:{nodes:[n('p0','P',400,220,'7.0\nInvoice &\nPayment'),n('e1','E',135,100,'OMS'),n('e2','E',665,100,'Customer'),n('e3','E',135,345,'Payment\nGateway'),n('e4','E',665,345,'Accounting\nSystem')],edges:[e('f1','e1','p0','Dispatch Event'),e('f2','p0','e2','E-Invoice'),e('f3','e2','p0','Payment'),e('f4','p0','e3','Payment Request'),e('f5','p0','e4','Invoice Archive')]},
+  level1:{nodes:[n('e1','E',80,160,'OMS'),n('p1','P',280,160,'7.1 Generate\nInvoice'),n('e2','E',80,320,'Customer'),n('p2','P',500,160,'7.2 Process\nPayment'),n('p3','P',500,320,'7.3 Archive\nInvoice'),n('s1','S',280,360,'D1 | Invoice Archive'),n('e3','E',700,220,'Payment\nGateway')],edges:[e('f1','e1','p1','Order Details'),e('f2','p1','e2','E-Invoice+Link'),e('f3','e2','p2','Payment'),e('f4','p2','e3','Payment Request'),e('f5','e3','p2','Confirmation'),e('f6','p2','p3','Paid Invoice'),e('f7','p3','s1','Archived Invoice')]}},
+FR8:{title:'Supplier PO Management',person:'Mahmoud',
+  level0:{nodes:[n('p0','P',400,220,'8.0\nSupplier PO\nManagement'),n('e1','E',135,100,'IMS'),n('e2','E',665,100,'Supplier'),n('e3','E',135,345,'Warehouse\nStaff'),n('e4','E',665,345,'Procurement DB')],edges:[e('f1','e1','p0','Reorder Alert'),e('f2','p0','e2','Purchase Order'),e('f3','e2','p0','PO Acknowledgement'),e('f4','e3','p0','Goods Receipt'),e('f5','p0','e4','PO Record')]},
+  level1:{nodes:[n('e1','E',80,160,'IMS'),n('p1','P',280,160,'8.1 Generate\nPurchase Order'),n('p2','P',280,320,'8.2 Supplier\nComm.'),n('e2','E',80,320,'Supplier'),n('p3','P',530,240,'8.3 Receive\nGoods'),n('s1','S',530,380,'D1 | Procurement DB'),n('e3','E',700,160,'Warehouse\nStaff')],edges:[e('f1','e1','p1','Reorder Trigger'),e('f2','p1','p2','PO Details'),e('f3','p2','e2','Purchase Order'),e('f4','e2','p2','Acknowledgement'),e('f5','p1','s1','PO Record'),e('f6','s1','p3','Expected Items'),e('f7','e3','p3','Delivery Data'),e('f8','p3','e1','Stock Update')]}},
+FR9:{title:'Demand Forecasting & BI',person:'Mahmoud',
+  level0:{nodes:[n('p0','P',400,220,'9.0\nDemand\nForecasting'),n('e1','E',135,100,'OMS Database'),n('e2','E',665,100,'Management'),n('e3','E',135,345,'Procurement\nTeam'),n('e4','E',665,345,'BI Dashboard')],edges:[e('f1','e1','p0','Historical Sales'),e('f2','e2','p0','Forecast Params'),e('f3','p0','e2','KPI Dashboard'),e('f4','p0','e3','Demand Forecast'),e('f5','p0','e4','Dashboard Data')]},
+  level1:{nodes:[n('e1','E',80,160,'OMS\nDatabase'),n('p1','P',270,160,'9.1 Analyse\nHistorical Data'),n('s1','S',270,360,'D1 | Data\nWarehouse'),n('p2','P',500,100,'9.2 Generate\nForecast'),n('p3','P',500,300,'9.3 Display\nBI Dashboard'),n('e2','E',700,160,'Management'),n('e3','E',700,320,'Procurement')],edges:[e('f1','e1','p1','Transactions'),e('f2','p1','s1','Trend Data'),e('f3','s1','p2','Historical Trends'),e('f4','e2','p2','Time Horizon'),e('f5','p2','s1','Forecast Results'),e('f6','s1','p3','KPI Data'),e('f7','p3','e2','Dashboard'),e('f8','p2','e3','Forecast Report')]}},
+FR10:{title:'Returns & Reverse Logistics',person:'Mahmoud',
+  level0:{nodes:[n('p0','P',400,220,'10.0\nReturns\nManagement'),n('e1','E',135,100,'Customer'),n('e2','E',665,100,'Warehouse\nStaff'),n('e3','E',135,345,'Billing\nSystem'),n('e4','E',665,345,'Returns DB')],edges:[e('f1','e1','p0','Return Request'),e('f2','p0','e1','RMA Number'),e('f3','p0','e2','Inspection Task'),e('f4','e2','p0','Inspection Result'),e('f5','p0','e3','Refund Request')]},
+  level1:{nodes:[n('e1','E',80,160,'Customer'),n('p1','P',280,160,'10.1 Verify\nEligibility'),n('p2','P',280,330,'10.2 Inspect\nGoods'),n('e2','E',80,330,'Billing\nSystem'),n('p3','P',530,220,'10.3 Issue\nRefund'),n('s1','S',530,380,'D1 | Returns DB'),n('e3','E',700,160,'Warehouse\nStaff')],edges:[e('f1','e1','p1','Return Request'),e('f2','p1','e1','RMA / Reject'),e('f3','p1','s1','RMA Record'),e('f4','s1','p2','Expected Returns'),e('f5','e3','p2','Condition Report'),e('f6','p2','s1','Inspection Result'),e('f7','s1','p3','Approved Return'),e('f8','p3','e2','Refund Request')]}}
+};
+const PERSONS={Mostafa:{color:'#38bdf8',frs:['FR1','FR2','FR3','FR4']},Omar:{color:'#fbbf24',frs:['FR5','FR6','FR7']},Mahmoud:{color:'#a78bfa',frs:['FR8','FR9','FR10']}};
+const PCOL={Mostafa:'#38bdf8',Omar:'#fbbf24',Mahmoud:'#a78bfa'};
+
+// ─── FINAL DFD DATA ────────────────────────────────────────────────────────────
+// ── FINAL LEVEL 0 ─ one giant context bubble ─────────────────────────────────
+// ViewBox 1800 x 900
+const FINAL_L0 = {
+  vb: '0 0 1800 900',
+  process: {x:900, y:450, label:'Sales Order\nProcessing\nSystem'},
+  entities: [
+    {id:'eC',  x:200, y:120, label:'Customer'},
+    {id:'eCS', x:200, y:310, label:'Call Centre\nStaff'},
+    {id:'eW',  x:200, y:500, label:'Warehouse\nStaff'},
+    {id:'eS',  x:200, y:690, label:'Supplier'},
+    {id:'eL',  x:1600, y:180, label:'Logistics\nPartner'},
+    {id:'ePG', x:1600, y:380, label:'Payment\nGateway'},
+    {id:'eMg', x:1600, y:580, label:'Management'},
+    {id:'ePr', x:1600, y:760, label:'Procurement\nTeam'},
+    {id:'eMob',x:900,  y:80,  label:'Mobile App\n/ Web Portal'},
+    {id:'eAcc',x:900,  y:820, label:'Accounting\nSystem'},
+  ],
+  flows: [
+    {from:'eC',  to:'p', label:'Purchase Order\n/ Return Request'},
+    {from:'p',   to:'eC',  label:'Confirmation\n/ Invoice / RMA'},
+    {from:'eCS', to:'p',   label:'Phone Order'},
+    {from:'eW',  to:'p',   label:'Stock Movement\n/ Goods Receipt'},
+    {from:'p',   to:'eW',  label:'Pick List\n/ PO Task'},
+    {from:'eS',  to:'p',   label:'PO Acknowledgement\n/ Delivery'},
+    {from:'p',   to:'eS',  label:'Purchase Order'},
+    {from:'p',   to:'eL',  label:'Pickup Request'},
+    {from:'eL',  to:'p',   label:'Tracking ID'},
+    {from:'p',   to:'ePG', label:'Payment Request'},
+    {from:'ePG', to:'p',   label:'Payment Confirm'},
+    {from:'p',   to:'eMg', label:'KPI Dashboard\n/ Stock Report'},
+    {from:'eMg', to:'p',   label:'Forecast Params'},
+    {from:'p',   to:'ePr', label:'Demand Forecast\n/ Reorder Alert'},
+    {from:'eMob',to:'p',   label:'Web / Mobile Order'},
+    {from:'p',   to:'eAcc',label:'Invoice Archive'},
+  ]
+};
+
+// ── FINAL LEVEL 1 ─ all 10 processes ─────────────────────────────────────────
+// Layout on a 2400 x 1200 canvas
+// Main flow: FR1→FR2→FR3→FR4→FR5→FR6→FR7 (top strip)
+// Support:   FR8 (below FR3), FR9 (below FR1), FR10 (below FR2)
+const FL1_VB = '0 0 2400 1160';
+const R = 54; // process radius
+
+// process nodes
+const FP = {
+  FR1:  {x:220,  y:200, color:'#38bdf8', label:'FR1\nOrder\nReceipt'},
+  FR2:  {x:520,  y:200, color:'#38bdf8', label:'FR2\nSales Order\nGeneration'},
+  FR3:  {x:820,  y:200, color:'#38bdf8', label:'FR3\nInventory\nManagement'},
+  FR4:  {x:1120, y:200, color:'#38bdf8', label:'FR4\nWarehouse\nPicking'},
+  FR5:  {x:1420, y:200, color:'#fbbf24', label:'FR5\nSorting &\nPacking'},
+  FR6:  {x:1720, y:200, color:'#fbbf24', label:'FR6\nShipping &\nLogistics'},
+  FR7:  {x:2020, y:200, color:'#fbbf24', label:'FR7\nInvoice &\nPayment'},
+  FR8:  {x:820,  y:560, color:'#a78bfa', label:'FR8\nSupplier\nPO Mgmt'},
+  FR9:  {x:220,  y:560, color:'#a78bfa', label:'FR9\nDemand\nForecasting'},
+  FR10: {x:1420, y:850, color:'#a78bfa', label:'FR10\nReturns &\nReverse'},
+};
+
+// data stores  (y between rows)
+const FDS = [
+  {id:'D1', x:370,  y:390, label:'D1 | Orders DB'},
+  {id:'D2', x:670,  y:390, label:'D2 | Inventory DB'},
+  {id:'D3', x:970,  y:390, label:'D3 | Pick / WMS DB'},
+  {id:'D4', x:1720, y:390, label:'D4 | Carrier API'},
+  {id:'D5', x:2020, y:390, label:'D5 | Invoice Archive'},
+  {id:'D6', x:820,  y:760, label:'D6 | Procurement DB'},
+  {id:'D7', x:1420, y:1010,label:'D7 | Returns DB'},
+];
+
+// external entities
+const FEE = [
+  {id:'eC',  x:60,   y:120,  label:'Customer'},
+  {id:'eCal',x:60,   y:240,  label:'Call Centre'},
+  {id:'eMob',x:220,  y:60,   label:'Mobile / Web'},
+  {id:'eW',  x:1120, y:390,  label:'Warehouse\nStaff'},
+  {id:'eSup',x:1020, y:700,  label:'Supplier'},
+  {id:'eLog',x:1900, y:80,   label:'Logistics\nPartner'},
+  {id:'ePG', x:2200, y:300,  label:'Payment\nGateway'},
+  {id:'eAcc',x:2200, y:430,  label:'Accounting\nSystem'},
+  {id:'eMg', x:60,   y:630,  label:'Management'},
+  {id:'ePrc',x:60,   y:500,  label:'Procurement\nTeam'},
+];
+
+// flows  {from, to, label, curve?}
+// from/to = FP key, FDS id, FEE id, or 'eC' etc.
+const FFL = [
+  // external → FR1
+  {f:'eC',   t:'FR1',  lb:'Web Order'},
+  {f:'eCal', t:'FR1',  lb:'Phone Order'},
+  {f:'eMob', t:'FR1',  lb:'Mobile Order'},
+  // FR1 → FR2
+  {f:'FR1',  t:'D1',   lb:'Order Data'},
+  {f:'D1',   t:'FR2',  lb:'Purchase Order'},
+  // FR2 ↔ D2 (inventory check)
+  {f:'FR2',  t:'D2',   lb:'Stock Query'},
+  {f:'D2',   t:'FR2',  lb:'Stock Status'},
+  // FR2 → FR3 (update)
+  {f:'FR2',  t:'FR3',  lb:'Sales Order\nConfirmed'},
+  // FR3 ↔ D2
+  {f:'FR3',  t:'D2',   lb:'Stock Update'},
+  // FR3 → FR8 (reorder)
+  {f:'FR3',  t:'FR8',  lb:'Reorder Alert'},
+  // FR3 → FR4
+  {f:'FR3',  t:'D3',   lb:'Pick Request'},
+  {f:'D3',   t:'FR4',  lb:'Pick List'},
+  // FR4 ↔ Warehouse Staff
+  {f:'FR4',  t:'eW',   lb:'Pick List'},
+  {f:'eW',   t:'FR4',  lb:'Scan Confirm'},
+  {f:'FR4',  t:'D2',   lb:'Stock Deduction'},
+  // FR4 → FR5
+  {f:'FR4',  t:'FR5',  lb:'Picked Items'},
+  // FR5 → FR6
+  {f:'FR5',  t:'FR6',  lb:'Packed & Labelled\nOrder'},
+  // FR6 ↔ Logistics / D4
+  {f:'FR6',  t:'D4',   lb:'Carrier API Call'},
+  {f:'D4',   t:'FR6',  lb:'Tracking ID'},
+  {f:'FR6',  t:'eLog', lb:'Pickup Request'},
+  {f:'eLog', t:'FR6',  lb:'Dispatch Confirm'},
+  // FR6 → Customer (tracking)
+  {f:'FR6',  t:'eC',   lb:'Tracking Info'},
+  // FR6 → FR7
+  {f:'FR6',  t:'FR7',  lb:'Dispatch Event'},
+  // FR7 ↔ Payment Gateway / Archive
+  {f:'FR7',  t:'eC',   lb:'E-Invoice'},
+  {f:'eC',   t:'FR7',  lb:'Payment'},
+  {f:'FR7',  t:'ePG',  lb:'Payment Request'},
+  {f:'ePG',  t:'FR7',  lb:'Confirmation'},
+  {f:'FR7',  t:'D5',   lb:'Invoice Archive'},
+  {f:'FR7',  t:'eAcc', lb:'Financial Record'},
+  // FR8 ↔ Supplier
+  {f:'FR8',  t:'eSup', lb:'Purchase Order'},
+  {f:'eSup', t:'FR8',  lb:'PO Acknowledge'},
+  {f:'FR8',  t:'D6',   lb:'PO Record'},
+  {f:'D6',   t:'FR3',  lb:'Incoming Stock\nUpdate'},
+  // FR9 ↔ Management
+  {f:'D2',   t:'FR9',  lb:'Historical Sales'},
+  {f:'FR9',  t:'eMg',  lb:'KPI Dashboard'},
+  {f:'eMg',  t:'FR9',  lb:'Forecast Params'},
+  {f:'FR9',  t:'ePrc', lb:'Demand Forecast'},
+  // FR10 ↔ Customer
+  {f:'eC',   t:'FR10', lb:'Return Request'},
+  {f:'FR10', t:'eC',   lb:'RMA / Refund'},
+  {f:'FR10', t:'D7',   lb:'Return Record'},
+  {f:'FR10', t:'FR3',  lb:'Stock Returned'},
+];
+
+// ─── SVG HELPERS ──────────────────────────────────────────────────────────────
+function svgT(x,y,text,sz,fill,anchor='middle'){
+  const lines=text.split('\n');
+  const lh=sz*1.35,totalH=(lines.length-1)*lh,sy=y-totalH/2;
+  const ts=lines.map((l,i)=>`<tspan x="${x}" dy="${i===0?0:lh}">${l}</tspan>`).join('');
+  return`<text x="${x}" y="${sy}" font-family="JetBrains Mono,monospace" font-size="${sz}" fill="${fill}" text-anchor="${anchor}" dominant-baseline="middle">${ts}</text>`;
+}
+function ep(nd,tx,ty){
+  const dx=tx-nd.x,dy=ty-nd.y,d=Math.hypot(dx,dy)||1;
+  if(nd.type==='P'||nd.R){const r=nd.R||44;return{x:nd.x+dx/d*r,y:nd.y+dy/d*r};}
+  const hw=nd.type==='S'?80:70,hh=nd.type==='S'?16:24;
+  const sx=hw/Math.abs(dx||.01),sy=hh/Math.abs(dy||.01),s=Math.min(sx,sy);
+  return{x:nd.x+dx*s,y:nd.y+dy*s};
+}
+
+// ─── INDIVIDUAL DIAGRAM RENDER ─────────────────────────────────────────────────
+function renderIndividual(frId,level){
+  const fr=DATA[frId],diag=level===0?fr.level0:fr.level1,pColor=PCOL[fr.person];
+  const vis=new Set(),steps=buildSteps(diag,frId,level);
+  for(let i=0;i<=curStep;i++){const s=steps[i];if(s&&s.id)vis.add(s.id);}
+  let s=`<defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e2d5a" stroke-width=".6" opacity=".5"/></pattern>
+  <marker id="ah" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#6b82a8"/></marker>
+  <marker id="ah-hi" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="${pColor}"/></marker>
+  <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter></defs>
+  <rect width="800" height="440" fill="#060d1f"/><rect width="800" height="440" fill="url(#grid)"/>
+  <rect width="800" height="28" fill="#0d1530" opacity=".85"/>`;
+  s+=svgT(400,14,level===0?'LEVEL 0 — CONTEXT':'LEVEL 1 — DETAILED',9,'#5a7099');
+  s+=svgT(12,14,`${frId}: ${fr.title}`,9,pColor,'start');
+  diag.edges.forEach(edge=>{
+    const src=diag.nodes.find(nd=>nd.id===edge.from),dst=diag.nodes.find(nd=>nd.id===edge.to);
+    const p1=ep(src,dst.x,dst.y),p2=ep(dst,src.x,src.y);
+    const isVis=curStep===-1?false:vis.has(edge.id),isNew=steps[curStep]&&steps[curStep].id===edge.id;
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    s+=`<g opacity="${isVis?1:0.07}"><line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${isNew?pColor:'#6b82a8'}" stroke-width="${isNew?2:1.5}" marker-end="url(#${isNew?'ah-hi':'ah'})"/>
+    ${isVis?`<rect x="${mx-30}" y="${my-8}" width="60" height="14" rx="3" fill="#060d1f" opacity=".85"/>${svgT(mx,my,edge.label.replace(/\n/g,' '),8.5,isNew?pColor:'#8ba3c0')}`:``}</g>`;
+  });
+  diag.nodes.forEach(nd=>{
+    const isVis=curStep===-1?false:vis.has(nd.id),isNew=steps[curStep]&&steps[curStep].id===nd.id,op=isVis?1:0.06;
+    s+=`<g opacity="${op}" ${isNew?'filter="url(#glow)"':''}>`;
+    if(nd.type==='P'){s+=`<circle cx="${nd.x}" cy="${nd.y}" r="44" fill="#0b2415" stroke="${isNew?pColor:'#4ade80'}" stroke-width="${isNew?2.5:1.5}"/>`;s+=svgT(nd.x,nd.y,nd.label,10,isNew?pColor:'#c8f0d8');}
+    else if(nd.type==='E'){s+=`<rect x="${nd.x-65}" y="${nd.y-22}" width="130" height="44" rx="2" fill="#162742" stroke="${isNew?pColor:'#38bdf8'}" stroke-width="${isNew?2.5:1.5}"/>`;s+=svgT(nd.x,nd.y,nd.label,10,isNew?pColor:'#b8d9f8');}
+    else{s+=`<rect x="${nd.x-70}" y="${nd.y-14}" width="140" height="28" fill="#1d1035" opacity=".8"/>`;s+=`<line x1="${nd.x-70}" y1="${nd.y-14}" x2="${nd.x+70}" y2="${nd.y-14}" stroke="${isNew?pColor:'#a78bfa'}" stroke-width="1.5"/>`;s+=`<line x1="${nd.x-70}" y1="${nd.y+14}" x2="${nd.x+70}" y2="${nd.y+14}" stroke="${isNew?pColor:'#a78bfa'}" stroke-width="1.5"/>`;s+=svgT(nd.x,nd.y,nd.label,9.5,isNew?pColor:'#c4b0f0');}
+    s+=`</g>`;
+  });
+  document.getElementById('dfd').innerHTML=s;
+}
+
+// ─── MINI CARD RENDER ──────────────────────────────────────────────────────────
+function miniSVG(frId,level){
+  const fr=DATA[frId],diag=level===0?fr.level0:fr.level1,pc=PCOL[fr.person];
+  const uid=frId+(level===0?'L0':'L1');
+  let s=`<defs>
+    <pattern id="mg${uid}" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e2d5a" stroke-width=".7" opacity=".6"/></pattern>
+    <marker id="am${uid}" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0,8 3.5,0 7" fill="${pc}"/></marker>
+    <filter id="gw${uid}"><feGaussianBlur stdDeviation="6" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+    <radialGradient id="pg${uid}" cx="50%" cy="50%"><stop offset="0%" stop-color="#0b2415"/><stop offset="100%" stop-color="#060f0a"/></radialGradient>
+  </defs>
+  <rect width="800" height="440" fill="#060d1f"/>
+  <rect width="800" height="440" fill="url(#mg${uid})"/>`;
+  diag.nodes.filter(nd=>nd.type==='P').forEach(nd=>{
+    s+=`<circle cx="${nd.x}" cy="${nd.y}" r="60" fill="${pc}0a" filter="url(#gw${uid})"/>`;
+  });
+  diag.edges.forEach(edge=>{
+    const src=diag.nodes.find(nd=>nd.id===edge.from),dst=diag.nodes.find(nd=>nd.id===edge.to);
+    const p1=ep(src,dst.x,dst.y),p2=ep(dst,src.x,src.y);
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    s+=`<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${pc}88" stroke-width="1.4" marker-end="url(#am${uid})"/>`;
+    s+=`<rect x="${mx-28}" y="${my-7}" width="56" height="13" rx="2" fill="#060d1f" opacity=".88"/>`;
+    s+=svgT(mx,my,edge.label.replace(/\n/g,' '),7.5,pc+'cc');
+  });
+  diag.nodes.forEach(nd=>{
+    if(nd.type==='P'){
+      s+=`<circle cx="${nd.x}" cy="${nd.y}" r="44" fill="url(#pg${uid})" stroke="${pc}" stroke-width="2"/>`;
+      s+=svgT(nd.x,nd.y,nd.label,9.5,pc);
+    } else if(nd.type==='E'){
+      s+=`<rect x="${nd.x-65}" y="${nd.y-22}" width="130" height="44" rx="3" fill="#162742" stroke="#38bdf8" stroke-width="1.4"/>`;
+      s+=svgT(nd.x,nd.y,nd.label,9.5,'#b8d9f8');
+    } else {
+      s+=`<rect x="${nd.x-70}" y="${nd.y-14}" width="140" height="28" fill="#1d1035" opacity=".9"/>`;
+      s+=`<line x1="${nd.x-70}" y1="${nd.y-14}" x2="${nd.x+70}" y2="${nd.y-14}" stroke="#a78bfa" stroke-width="1.5"/>`;
+      s+=`<line x1="${nd.x-70}" y1="${nd.y+14}" x2="${nd.x+70}" y2="${nd.y+14}" stroke="#a78bfa" stroke-width="1.5"/>`;
+      s+=svgT(nd.x,nd.y,nd.label,9,'#c4b0f0');
+    }
+  });
+  s+=`<rect width="800" height="24" fill="#0d1530" opacity=".92"/>`;
+  s+=`<rect width="800" height="2" y="24" fill="${pc}" opacity=".5"/>`;
+  s+=svgT(10,12,`${frId}: ${fr.title}  ·  ${level===0?'Level 0':'Level 1'}`,8.5,pc,'start');
+  return s;
+}
+
+// ─── FINAL L0 RENDER ──────────────────────────────────────────────────────────
+function renderFinalL0(){
+  const D=FINAL_L0,cx=900,cy=450,pr=110;
+  const lookup={}; D.entities.forEach(ee=>{lookup[ee.id]={...ee,type:'E'};});
+  const proc={id:'p',x:cx,y:cy,R:pr,type:'P'};
+
+  function getNode(id){if(id==='p')return proc;return lookup[id]||null;}
+
+  let s=`<defs>
+    <pattern id="fg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e2d5a" stroke-width=".5" opacity=".4"/></pattern>
+    <radialGradient id="prg" cx="50%" cy="50%"><stop offset="0%" stop-color="#0b2415"/><stop offset="100%" stop-color="#071610"/></radialGradient>
+    <marker id="fah" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#4ade80"/></marker>
+    <filter id="gproc"><feGaussianBlur stdDeviation="18" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
+  </defs>
+  <rect width="1800" height="900" fill="#060d1f"/><rect width="1800" height="900" fill="url(#fg)"/>
+  <circle cx="${cx}" cy="${cy}" r="${pr+30}" fill="#4ade8008" filter="url(#gproc)"/>`;
+
+  // flows
+  D.flows.forEach(fl=>{
+    const src=getNode(fl.from),dst=getNode(fl.to);
+    if(!src||!dst)return;
+    const p1=ep(src,dst.x,dst.y),p2=ep(dst,src.x,src.y);
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    const toProc=fl.to==='p';
+    s+=`<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#4ade8066" stroke-width="1.3" marker-end="url(#fah)"/>`;
+    s+=`<rect x="${mx-38}" y="${my-9}" width="76" height="17" rx="3" fill="#060d1f" opacity=".9"/>`;
+    s+=svgT(mx,my,fl.label.replace(/\n/g,' '),8,'#8ba3c0');
+  });
+
+  // entities
+  D.entities.forEach(ee=>{
+    s+=`<rect x="${ee.x-62}" y="${ee.y-22}" width="124" height="44" rx="3" fill="#162742" stroke="#38bdf8" stroke-width="1.4"/>`;
+    s+=svgT(ee.x,ee.y,ee.label,10,'#b8d9f8');
+  });
+
+  // process
+  s+=`<circle cx="${cx}" cy="${cy}" r="${pr}" fill="url(#prg)" stroke="#4ade80" stroke-width="2.5"/>`;
+  s+=svgT(cx,cy,'Sales Order\nProcessing\nSystem',16,'#4ade80');
+
+  // title
+  s+=`<rect width="1800" height="34" fill="#0d1530" opacity=".9"/>`;
+  s+=svgT(12,17,'FINAL LEVEL 0 — SYSTEM CONTEXT DIAGRAM',11,'#4ade80','start');
+  s+=svgT(1788,17,'All 10 Functional Requirements · Complete System Boundary',9,'#5a7099','end');
+
+  document.getElementById('fv-svg').setAttribute('viewBox',D.vb);
+  document.getElementById('fv-svg').innerHTML=s;
+}
+
+// ─── FINAL L1 RENDER ──────────────────────────────────────────────────────────
+function renderFinalL1(){
+  // build lookup
+  const allNodes={};
+  Object.entries(FP).forEach(([id,p])=>{allNodes[id]={...p,id,type:'P',R:R};});
+  FDS.forEach(d=>{allNodes[d.id]={...d,type:'S'};});
+  FEE.forEach(e=>{allNodes[e.id]={...e,type:'E'};});
+
+  function getN(id){return allNodes[id]||null;}
+
+  let s=`<defs>
+    <pattern id="flg" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e2d5a" stroke-width=".5" opacity=".35"/></pattern>
+    <marker id="flah" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#6b82a8"/></marker>
+    <marker id="flahM" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#38bdf8"/></marker>
+    <marker id="flahO" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#fbbf24"/></marker>
+    <marker id="flahH" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="2400" height="1160" fill="#060d1f"/><rect width="2400" height="1160" fill="url(#flg)"/>`;
+
+  // lane background strips
+  s+=`<rect x="30" y="110" width="1260" height="190" rx="6" fill="#38bdf808" stroke="#38bdf812" stroke-width="1"/>`;
+  s+=`<rect x="1310" y="110" width="780" height="190" rx="6" fill="#fbbf2408" stroke="#fbbf2412" stroke-width="1"/>`;
+  s+=`<rect x="30" y="470" width="1060" height="180" rx="6" fill="#a78bfa08" stroke="#a78bfa12" stroke-width="1"/>`;
+  s+=svgT(80,140,'Mostafa — FR1 to FR4',9,'#38bdf855','start');
+  s+=svgT(1360,140,'Omar — FR5 to FR7',9,'#fbbf2455','start');
+  s+=svgT(80,500,'Mahmoud — FR8 to FR10',9,'#a78bfa55','start');
+
+  // flows
+  FFL.forEach(fl=>{
+    const src=getN(fl.f),dst=getN(fl.t);
+    if(!src||!dst)return;
+    const p1=ep(src,dst.x,dst.y),p2=ep(dst,src.x,src.y);
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    // colour by source process person if available
+    let acol='#6b82a8',mname='flah';
+    if(src.color){if(src.color==='#38bdf8'){acol='#38bdf877';mname='flahM';}else if(src.color==='#fbbf24'){acol='#fbbf2477';mname='flahO';}else{acol='#a78bfa77';mname='flahH';}}
+    s+=`<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${acol}" stroke-width="1.4" marker-end="url(#${mname})"/>`;
+    s+=`<rect x="${mx-36}" y="${my-8}" width="72" height="15" rx="2" fill="#060d1f" opacity=".9"/>`;
+    s+=svgT(mx,my,fl.lb.replace(/\n/g,' '),7.5,'#8ba3c0');
+  });
+
+  // data stores
+  FDS.forEach(d=>{
+    s+=`<rect x="${d.x-78}" y="${d.y-15}" width="156" height="30" fill="#1d1035" opacity=".9"/>`;
+    s+=`<line x1="${d.x-78}" y1="${d.y-15}" x2="${d.x+78}" y2="${d.y-15}" stroke="#a78bfa" stroke-width="1.5"/>`;
+    s+=`<line x1="${d.x-78}" y1="${d.y+15}" x2="${d.x+78}" y2="${d.y+15}" stroke="#a78bfa" stroke-width="1.5"/>`;
+    s+=svgT(d.x,d.y,d.label,8.5,'#c4b0f0');
+  });
+
+  // external entities
+  FEE.forEach(e=>{
+    s+=`<rect x="${e.x-62}" y="${e.y-22}" width="124" height="44" rx="2" fill="#162742" stroke="#38bdf8" stroke-width="1.3"/>`;
+    s+=svgT(e.x,e.y,e.label,9.5,'#b8d9f8');
+  });
+
+  // processes
+  Object.entries(FP).forEach(([id,p])=>{
+    s+=`<circle cx="${p.x}" cy="${p.y}" r="${R}" fill="#0b1c10" stroke="${p.color}" stroke-width="2"/>`;
+    s+=svgT(p.x,p.y,p.label,9.5,p.color);
+  });
+
+  // title
+  s+=`<rect width="2400" height="34" fill="#0d1530" opacity=".9"/>`;
+  s+=svgT(12,17,'FINAL LEVEL 1 — COMPLETE SYSTEM DFD (All 10 FRs)',11,'#f87171','start');
+  s+=svgT(2388,17,'Drag to pan · Scroll to zoom',9,'#5a7099','end');
+
+  document.getElementById('fv-svg').setAttribute('viewBox',FL1_VB);
+  document.getElementById('fv-svg').innerHTML=s;
+}
+
+// ─── PAN / ZOOM ────────────────────────────────────────────────────────────────
+let fvScale=1,fvTx=0,fvTy=0,fvDrag=false,fvLx=0,fvLy=0,fvInitVB='';
+function applyFVTransform(){
+  const el=document.getElementById('fv-svg');
+  const vb=fvInitVB.split(' ').map(Number);
+  const W=vb[2],H=vb[3];
+  const nW=W/fvScale,nH=H/fvScale;
+  el.setAttribute('viewBox',`${fvTx} ${fvTy} ${nW} ${nH}`);
+}
+function zoomFinal(f){
+  const el=document.getElementById('fv-svg'),vb=fvInitVB.split(' ').map(Number),W=vb[2],H=vb[3];
+  const cx=fvTx+(W/fvScale)/2,cy=fvTy+(H/fvScale)/2;
+  fvScale=Math.max(0.25,Math.min(4,fvScale*f));
+  fvTx=cx-(W/fvScale)/2;fvTy=cy-(H/fvScale)/2;
+  applyFVTransform();
+}
+function resetFinal(){fvScale=1;fvTx=0;fvTy=0;applyFVTransform();}
+function initFVInteraction(){
+  const wrap=document.getElementById('fv-wrap'),svg=document.getElementById('fv-svg');
+  wrap.onwheel=ev=>{ev.preventDefault();zoomFinal(ev.deltaY<0?1.12:0.89);};
+  svg.onmousedown=ev=>{fvDrag=true;fvLx=ev.clientX;fvLy=ev.clientY;svg.classList.add('dragging');};
+  window.onmousemove=ev=>{
+    if(!fvDrag)return;
+    const vb=fvInitVB.split(' ').map(Number),W=vb[2],H=vb[3];
+    const rect=svg.getBoundingClientRect();
+    const dx=(ev.clientX-fvLx)*(W/fvScale)/rect.width;
+    const dy=(ev.clientY-fvLy)*(H/fvScale)/rect.height;
+    fvTx-=dx;fvTy-=dy;fvLx=ev.clientX;fvLy=ev.clientY;
+    applyFVTransform();
+  };
+  window.onmouseup=()=>{fvDrag=false;svg.classList.remove('dragging');};
+}
+
+// ─── STEP SYSTEM ──────────────────────────────────────────────────────────────
+const TM={
+  P:{badge:'PROCESS',cls:'b-P',color:'#4ade80',bg:'#0b2415',symbol:'Circle',
+     rule:'Processes transform or act on data. Each is numbered (e.g. 2.1). <b>Rule:</b> data can never jump directly between two external entities — it must always pass through a process.'},
+  E:{badge:'EXTERNAL ENTITY',cls:'b-E',color:'#38bdf8',bg:'#162742',symbol:'Rectangle',
+     rule:'External entities sit <b>outside</b> the system boundary. They send data in or receive data out, but hold no internal logic.'},
+  S:{badge:'DATA STORE',cls:'b-S',color:'#a78bfa',bg:'#1d1035',symbol:'Open parallel lines',
+     rule:'Data stores hold data <b>at rest</b>. Only a process can read from or write to a store — flows never connect two stores directly.'},
+  F:{badge:'DATA FLOW',cls:'b-F',color:'#6b82a8',bg:'#1a2230',symbol:'Labelled arrow',
+     rule:'Arrows show <b>data in motion</b>. Every arrow must connect to at least one process. Label the arrow with the data name, not an action verb.'},
+  I:{badge:'INTRO',cls:'b-I',color:'#fbbf24',bg:'#1a1410',symbol:'',rule:''}
+};
+
+function nodeVisual(type,label,color){
+  const lb=label.replace(/\n/g,' ');
+  if(type==='P') return`<div class="sv-process" style="background:${TM.P.bg};border:2px solid ${color||TM.P.color};color:${color||TM.P.color}">${lb}</div>`;
+  if(type==='E') return`<div class="sv-entity" style="background:${TM.E.bg};border:1.5px solid ${TM.E.color};color:${TM.E.color}">${lb}</div>`;
+  if(type==='S') return`<div class="sv-store" style="background:${TM.S.bg};color:${TM.S.color}">${lb}</div>`;
+  return'';
+}
+
+function buildSteps(diag,frId,level){
+  const fr=DATA[frId],pColor=PCOL[fr.person];
+  const steps=[{type:'I',frId,level,pColor,
+    title:`${frId}: ${fr.title}`,
+    sublevel:`Level ${level===0?'0 — Context Diagram':'1 — Detailed DFD'}`,
+    what:level===0
+      ?'A <b>Level 0 DFD</b> (Context Diagram) shows the entire system as <b>one process circle</b>. Its job is to define what crosses the system boundary.'
+      :'A <b>Level 1 DFD</b> explodes the context into internal sub-processes, data stores, and all internal flows.',
+    why:level===0
+      ?'Seeing the system as a black box first lets the team agree on <b>scope and boundaries</b> before any detail.'
+      :'Level 1 reveals <b>who does what</b>, where data is stored, and how each sub-process hands off to the next.',
+    how:level===0
+      ?'① Draw ONE circle (the system). ② Surround it with rectangles (external actors). ③ Connect with labelled arrows showing what data flows.'
+      :'① Replace the circle with numbered sub-process circles. ② Add data stores as parallel-line bars. ③ Re-route every flow with precise labels.'
+  }];
+  const nodes=diag.nodes,edges=diag.edges;
+  [...nodes.filter(n=>n.type==='P'),...nodes.filter(n=>n.type==='E'),...nodes.filter(n=>n.type==='S'),...edges].forEach(el=>{
+    if(el.from!==undefined){
+      const src=nodes.find(nd=>nd.id===el.from),dst=nodes.find(nd=>nd.id===el.to);
+      steps.push({type:'F',id:el.id,frId,pColor,
+        title:el.label.replace(/\n/g,' '),
+        from:src.label.replace(/\n/g,' '),fromType:src.type,
+        to:dst.label.replace(/\n/g,' '),toType:dst.type,
+        carries:el.label.replace(/\n/g,' ')});
+    } else {
+      steps.push({type:el.type,id:el.id,frId,pColor,
+        label:el.label.replace(/\n/g,' '),
+        rawLabel:el.label,
+        role:el.type==='P'
+          ?`Acts as a <b>system process</b>: it receives incoming data, applies logic, and produces an output. Drawn as a circle and numbered.`
+          :el.type==='E'
+          ?`Exists <b>outside the system boundary</b>. It either originates data (input) or receives data (output) — it never transforms data internally.`
+          :`A <b>data repository</b> that holds records between process steps. Processes read from it or write to it.`});
+    }
+  });
+  return steps;
+}
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let curPerson='Mostafa',curFR='FR1',curLevel=0,curStep=-1,curMode='single';
+
+function renderPanel(){
+  const fr=DATA[curFR],diag=curLevel===0?fr.level0:fr.level1;
+  const steps=buildSteps(diag,curFR,curLevel),total=steps.length-1;
+  document.getElementById('ptxt').textContent=`Step ${Math.max(0,curStep)} of ${total}`;
+  document.getElementById('pfill').style.width=total>0?Math.max(0,(curStep/total)*100)+'%':'0%';
+  const body=document.getElementById('sbody');
+  const pColor=PCOL[fr.person];
+
+  if(curStep===-1){
+    body.innerHTML=`
+    <div class="scard" style="border-color:${pColor}44">
+      <div class="scard-top" style="border-bottom-color:${pColor}33;background:${pColor}0a">
+        <div class="snum" style="color:${pColor}">${curFR} · ${fr.person}</div>
+        <div class="sname">${fr.title}</div>
+      </div>
+      <div class="scard-body">
+        <span class="sbadge b-I">▶ READY TO START</span>
+        <div class="stxt">Press <b>Next →</b> to walk through every element of this DFD one step at a time.<br><br>Each step highlights one symbol on the diagram and explains its <b>type</b>, <b>role</b>, and <b>drawing rule</b>.</div>
+        <div class="srule" style="border-left-color:${pColor}">
+          <div class="srule-lbl">Total elements</div>
+          <div class="srule-txt">${total} steps in this diagram · use Prev / Next or <b>Show All</b> to reveal everything at once.</div>
+        </div>
+      </div>
+    </div>`;
+    document.getElementById('bprev').disabled=true;
+    document.getElementById('bnext').disabled=false;
+    return;
+  }
+
+  const s=steps[curStep];
+  const m=TM[s.type]||TM['I'];
+
+  if(s.type==='I'){
+    body.innerHTML=`
+    <div class="scard" style="border-color:${pColor}55">
+      <div class="scard-top" style="border-bottom-color:${pColor}33;background:${pColor}0d">
+        <div class="snum" style="color:${pColor}">Step ${curStep} / ${total} · OVERVIEW</div>
+        <div class="sname">${s.sublevel}</div>
+      </div>
+      <div class="scard-body">
+        <span class="sbadge b-I">📘 DFD INTRO</span>
+        <div class="stxt"><b>WHAT:</b><br>${s.what}</div>
+        <div class="srule" style="border-left-color:${pColor};margin-top:8px">
+          <div class="srule-lbl">WHY this level?</div>
+          <div class="srule-txt">${s.why}</div>
+        </div>
+        <div class="srule" style="border-left-color:#4ade80;margin-top:6px">
+          <div class="srule-lbl">How to draw it</div>
+          <div class="srule-txt">${s.how}</div>
+        </div>
+      </div>
+    </div>`;
+  } else if(s.type==='F'){
+    const typeColor=(t)=>t==='P'?'#4ade80':t==='E'?'#38bdf8':'#a78bfa';
+    const typeName=(t)=>t==='P'?'Process':t==='E'?'External Entity':'Data Store';
+    body.innerHTML=`
+    <div class="scard" style="border-color:${pColor}44">
+      <div class="scard-top" style="border-bottom-color:#6b82a833;background:#1a22300d">
+        <div class="snum" style="color:${pColor}">Step ${curStep} / ${total}</div>
+        <div class="sname">${s.title}</div>
+      </div>
+      <div class="scard-body">
+        <span class="sbadge b-F">→ DATA FLOW</span>
+        <div class="svisual" style="background:#0a1220;border-radius:6px;gap:6px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+            ${nodeVisual(s.fromType,s.from,s.fromType==='P'?pColor:null)}
+            <span style="font-size:7.5px;color:${typeColor(s.fromType)};font-family:JetBrains Mono,monospace">${typeName(s.fromType)}</span>
+          </div>
+          <div class="sv-arrow" style="margin-bottom:14px"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+            ${nodeVisual(s.toType,s.to,s.toType==='P'?pColor:null)}
+            <span style="font-size:7.5px;color:${typeColor(s.toType)};font-family:JetBrains Mono,monospace">${typeName(s.toType)}</span>
+          </div>
+        </div>
+        <div class="sflow-detail">
+          <div class="sfd-row"><span class="sfd-lbl">FROM&nbsp;</span><span>${s.from}</span></div>
+          <div class="sfd-row"><span class="sfd-lbl">TO&nbsp;&nbsp;&nbsp;</span><span>${s.to}</span></div>
+          <div class="sfd-row"><span class="sfd-lbl">DATA&nbsp;</span><span style="color:#dde6f0;font-weight:600">${s.carries}</span></div>
+        </div>
+        <div class="srule" style="border-left-color:#6b82a8;margin-top:8px">
+          <div class="srule-lbl">Drawing rule</div>
+          <div class="srule-txt">${m.rule}</div>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    const accentColor=m.color;
+    body.innerHTML=`
+    <div class="scard" style="border-color:${accentColor}44">
+      <div class="scard-top" style="border-bottom-color:${accentColor}33;background:${accentColor}0a">
+        <div class="snum" style="color:${pColor}">Step ${curStep} / ${total}</div>
+        <div class="sname">${s.label}</div>
+      </div>
+      <div class="scard-body">
+        <span class="sbadge ${m.cls}">◆ ${m.badge}</span>
+        <div class="svisual" style="background:#060d1f;border-radius:6px">
+          ${nodeVisual(s.type,s.label,s.type==='P'?pColor:null)}
+        </div>
+        <div class="stxt">${s.role}</div>
+        <div class="srule" style="border-left-color:${accentColor};margin-top:8px">
+          <div class="srule-lbl">Symbol: ${m.symbol}</div>
+          <div class="srule-txt">${m.rule}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('bprev').disabled=curStep<=-1;
+  document.getElementById('bnext').disabled=curStep>=total;
+}
+function nav(dir){
+  const diag=curLevel===0?DATA[curFR].level0:DATA[curFR].level1;
+  const steps=buildSteps(diag,curFR,curLevel);
+  curStep=Math.max(-1,Math.min(steps.length-1,curStep+dir));
+  renderIndividual(curFR,curLevel);renderPanel();
+}
+function showAll(){
+  const diag=curLevel===0?DATA[curFR].level0:DATA[curFR].level1;
+  const steps=buildSteps(diag,curFR,curLevel);
+  curStep=steps.length-1;
+  renderIndividual(curFR,curLevel);renderPanel();
+}
+function buildFinalL0Steps(person){
+  const col=PCOL[person];
+  const frs=PERSONS[person].frs;
+  const steps=[];
+  steps.push({type:'I',person,col,
+    title:person+"'s System Connections",
+    what:"These are the external actors and data flows that connect to the system in <b>"+person+"'s functional area</b> ("+frs.join(', ')+").",
+    why:'In the Level 0 context diagram, every external actor that interacts with the system boundary is shown as a rectangle connected to the central process circle.',
+    how:'Each rectangle is an External Entity. Each arrow is a Data Flow crossing the system boundary. The central circle represents the entire system.'
+  });
+  const personEntities={
+    Mostafa:['eC','eCS','eMob'],
+    Omar:['eL','ePG','eAcc'],
+    Mahmoud:['eW','eS','eMg','ePr']
+  };
+  const personFlows={
+    Mostafa:[
+      {from:'eC',to:'p',label:'Purchase Order / Return Request'},
+      {from:'p',to:'eC',label:'Confirmation / Invoice / RMA'},
+      {from:'eCS',to:'p',label:'Phone Order'},
+      {from:'eMob',to:'p',label:'Web / Web App Order'}
+    ],
+    Omar:[
+      {from:'p',to:'eL',label:'Pickup Request'},
+      {from:'eL',to:'p',label:'Tracking ID'},
+      {from:'p',to:'ePG',label:'Payment Request'},
+      {from:'ePG',to:'p',label:'Payment Confirm'},
+      {from:'p',to:'eAcc',label:'Invoice Archive'}
+    ],
+    Mahmoud:[
+      {from:'eW',to:'p',label:'Stock Movement / Goods Receipt'},
+      {from:'p',to:'eW',label:'Pick List / PO Task'},
+      {from:'eS',to:'p',label:'PO Acknowledgement / Delivery'},
+      {from:'p',to:'eS',label:'Purchase Order'},
+      {from:'p',to:'eMg',label:'KPI Dashboard / Stock Report'},
+      {from:'eMg',to:'p',label:'Forecast Params'},
+      {from:'p',to:'ePr',label:'Demand Forecast / Reorder Alert'}
+    ]
+  };
+  (personEntities[person]||[]).forEach(function(eid){
+    var ee=FINAL_L0.entities.find(function(e){return e.id===eid;});
+    if(!ee)return;
+    var lb=ee.label.replace(NL,' ');
+    steps.push({type:'E',person:person,col:col,label:lb,
+      role:'<b>'+lb+'</b> is an external actor that sits outside the system boundary. It interacts with the Sales Order Processing System through data flows.'});
+  });
+  (personFlows[person]||[]).forEach(function(fl){
+    var fromLabel=fl.from==='p'?'Sales Order Processing System':((FINAL_L0.entities.find(function(e){return e.id===fl.from;})||{}).label||fl.from).replace(NL,' ');
+    var toLabel=fl.to==='p'?'Sales Order Processing System':((FINAL_L0.entities.find(function(e){return e.id===fl.to;})||{}).label||fl.to).replace(NL,' ');
+    steps.push({type:'F',person:person,col:col,
+      title:fl.label,
+      from:fromLabel, to:toLabel,
+      fromType:fl.from==='p'?'P':'E', toType:fl.to==='p'?'P':'E',
+      carries:fl.label});
+  });
+  return steps;
+}
+
+function buildFinalL1Steps(person){
+  const col=PCOL[person];
+  const frs=PERSONS[person].frs;
+  const steps=[];
+  steps.push({type:'I',person:person,col:col,
+    title:person+' \u2014 '+frs.join(', '),
+    what:'<b>'+person+'</b> is responsible for '+frs.length+' functional requirements: <b>'+frs.map(function(f){return f+': '+DATA[f].title;}).join('</b>, <b>')+'</b>.',
+    why:'In the Level 1 DFD, each FR becomes a numbered process circle. They connect to data stores, external entities, and each other through labelled data flows.',
+    how:'Walk through each process circle, then its connected data stores, then each data flow to see how '+person+"'s part of the system fits into the whole."
+  });
+  frs.forEach(function(frId){
+    var p=FP[frId];
+    var lb=p.label.replace(NL,' ');
+    steps.push({type:'P',person:person,col:col,frId:frId,label:lb,
+      role:'<b>'+lb+'</b> is '+DATA[frId].title+'. It is '+person+"'s process circle in the full system DFD, numbered as "+frId+'.'});
+  });
+  const dsUsed=new Set();
+  FFL.forEach(function(fl){
+    var srcIsFR=FP[fl.f]&&PERSONS[person].frs.indexOf(fl.f)>=0;
+    var dstIsFR=FP[fl.t]&&PERSONS[person].frs.indexOf(fl.t)>=0;
+    if(srcIsFR){var ds=FDS.find(function(d){return d.id===fl.t;});if(ds)dsUsed.add(ds.id);}
+    if(dstIsFR){var ds2=FDS.find(function(d){return d.id===fl.f;});if(ds2)dsUsed.add(ds2.id);}
+  });
+  FDS.filter(function(d){return dsUsed.has(d.id);}).forEach(function(d){
+    steps.push({type:'S',person:person,col:col,label:d.label,
+      role:'<b>'+d.label+'</b> is a data store that one or more of '+person+"'s processes reads from or writes to."});
+  });
+  var allN={};
+  Object.keys(FP).forEach(function(id){allN[id]=FP[id].label.replace(NL,' ');});
+  FDS.forEach(function(d){allN[d.id]=d.label;});
+  FEE.forEach(function(e){allN[e.id]=e.label.replace(NL,' ');});
+  FFL.filter(function(fl){
+    return (FP[fl.f]&&PERSONS[person].frs.indexOf(fl.f)>=0)||(FP[fl.t]&&PERSONS[person].frs.indexOf(fl.t)>=0);
+  }).forEach(function(fl){
+    var srcLabel=allN[fl.f]||fl.f;
+    var dstLabel=allN[fl.t]||fl.t;
+    var srcType=FP[fl.f]?'P':FDS.find(function(d){return d.id===fl.f;})?'S':'E';
+    var dstType=FP[fl.t]?'P':FDS.find(function(d){return d.id===fl.t;})?'S':'E';
+    steps.push({type:'F',person:person,col:col,
+      title:fl.lb.replace(NL,' '),
+      from:srcLabel,to:dstLabel,
+      fromType:srcType,toType:dstType,
+      carries:fl.lb.replace(NL,' ')});
+  });
+  return steps;
+}
+
+function getFinalSteps(person){
+  return curFinalMode==='fin0'?buildFinalL0Steps(person):buildFinalL1Steps(person);
+}
+
+function renderFinalPanel(){
+  const person=curFinalPerson, col=PCOL[person];
+  const steps=getFinalSteps(person), total=steps.length-1;
+  document.getElementById('fptxt').textContent='Step '+Math.max(0,curFinalStep)+' of '+total;
+  document.getElementById('fpfill').style.width=total>0?Math.max(0,(curFinalStep/total)*100)+'%':'0%';
+  document.getElementById('fpfill').style.background=col;
+  document.querySelectorAll('.fpbtab').forEach(function(b){b.classList.toggle('on',b.dataset.fp===person);});
+  const body=document.getElementById('fsbody');
+
+  if(curFinalStep===-1){
+    body.innerHTML='<div class="scard" style="border-color:'+col+'44"><div class="scard-top" style="border-bottom-color:'+col+'33;background:'+col+'0a"><div class="snum" style="color:'+col+'">'+person+' \u2014 '+PERSONS[person].frs.join(' \u00b7 ')+'</div><div class="sname">'+(curFinalMode==='fin0'?'Final Level 0 \u2014 System Context':'Final Level 1 \u2014 Full System DFD')+'</div></div><div class="scard-body"><span class="sbadge b-I">\u25b6 READY</span><div class="stxt">Press <b>Next \u2192</b> to walk through <b>'+person+"'s</b> part of the diagram step by step.<br><br>Use the tabs above to switch between Mostafa \u00b7 Omar \u00b7 Mahmoud.</div>"+'<div class="srule" style="border-left-color:'+col+'"><div class="srule-lbl">Steps in this section</div><div class="srule-txt">'+total+' elements assigned to '+person+'</div></div></div></div>';
+    document.getElementById('fbprev').disabled=true;
+    document.getElementById('fbnext').disabled=false;
+    return;
+  }
+
+  const s=steps[curFinalStep];
+  const m=TM[s.type]||TM['I'];
+  var html='';
+  if(s.type==='I'){
+    html='<div class="scard" style="border-color:'+col+'55"><div class="scard-top" style="border-bottom-color:'+col+'33;background:'+col+'0d"><div class="snum" style="color:'+col+'">Step '+curFinalStep+' / '+total+' \u00b7 OVERVIEW</div><div class="sname">'+s.title+'</div></div><div class="scard-body"><span class="sbadge" style="background:'+col+'18;border:1px solid '+col+';color:'+col+'">\ud83d\udcd8 SECTION INTRO</span><div class="stxt"><b>WHAT:</b><br>'+s.what+'</div><div class="srule" style="border-left-color:'+col+';margin-top:8px"><div class="srule-lbl">WHY</div><div class="srule-txt">'+s.why+'</div></div><div class="srule" style="border-left-color:#4ade80;margin-top:6px"><div class="srule-lbl">HOW TO READ</div><div class="srule-txt">'+s.how+'</div></div></div></div>';
+  } else if(s.type==='F'){
+    var tc=function(t){return t==='P'?'#4ade80':t==='E'?'#38bdf8':'#a78bfa';};
+    var tn=function(t){return t==='P'?'Process':t==='E'?'Entity':'Data Store';};
+    html='<div class="scard" style="border-color:'+col+'44"><div class="scard-top" style="border-bottom-color:#6b82a833;background:#1a22300d"><div class="snum" style="color:'+col+'">Step '+curFinalStep+' / '+total+'</div><div class="sname">'+s.title+'</div></div><div class="scard-body"><span class="sbadge b-F">\u2192 DATA FLOW</span><div class="svisual" style="background:#0a1220;border-radius:6px;gap:6px"><div style="display:flex;flex-direction:column;align-items:center;gap:3px">'+nodeVisual(s.fromType,s.from,s.fromType==='P'?col:null)+'<span style="font-size:7.5px;color:'+tc(s.fromType)+';font-family:JetBrains Mono,monospace">'+tn(s.fromType)+'</span></div><div class="sv-arrow" style="margin-bottom:14px"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px">'+nodeVisual(s.toType,s.to,s.toType==='P'?col:null)+'<span style="font-size:7.5px;color:'+tc(s.toType)+';font-family:JetBrains Mono,monospace">'+tn(s.toType)+'</span></div></div><div class="sflow-detail"><div class="sfd-row"><span class="sfd-lbl">FROM</span><span>'+s.from+'</span></div><div class="sfd-row"><span class="sfd-lbl">TO</span><span>'+s.to+'</span></div><div class="sfd-row"><span class="sfd-lbl">DATA</span><span style="color:#dde6f0;font-weight:600">'+s.carries+'</span></div></div><div class="srule" style="border-left-color:#6b82a8;margin-top:8px"><div class="srule-lbl">Drawing rule</div><div class="srule-txt">'+m.rule+'</div></div></div></div>';
+  } else {
+    var acol=m.color;
+    html='<div class="scard" style="border-color:'+acol+'44"><div class="scard-top" style="border-bottom-color:'+acol+'33;background:'+acol+'0a"><div class="snum" style="color:'+col+'">Step '+curFinalStep+' / '+total+'</div><div class="sname">'+s.label+'</div></div><div class="scard-body"><span class="sbadge '+m.cls+'">\u25c6 '+m.badge+'</span><div class="svisual" style="background:#060d1f;border-radius:6px">'+nodeVisual(s.type,s.label,s.type==='P'?col:null)+'</div><div class="stxt">'+s.role+'</div><div class="srule" style="border-left-color:'+acol+';margin-top:8px"><div class="srule-lbl">Symbol: '+m.symbol+'</div><div class="srule-txt">'+m.rule+'</div></div></div></div>';
+  }
+  body.innerHTML=html;
+  document.getElementById('fbprev').disabled=curFinalStep<=-1;
+  document.getElementById('fbnext').disabled=curFinalStep>=total;
+}
+
+function fnav(dir){
+  const steps=getFinalSteps(curFinalPerson);
+  curFinalStep=Math.max(-1,Math.min(steps.length-1,curFinalStep+dir));
+  renderFinalPanel();
+}
+function fshowAll(){
+  curFinalStep=getFinalSteps(curFinalPerson).length-1;
+  renderFinalPanel();
+}
+function setFinalPerson(p){
+  curFinalPerson=p; curFinalStep=-1;
+  renderFinalPanel();
+}
+
+
+// ─── ALL VIEW ─────────────────────────────────────────────────────────────────
+// ─── ALL VIEW ─────────────────────────────────────────────────────────────────
+function renderAllView(level){
+  let html=`<div class="all-header"><h2>${level===0?'Level 0 — All Context Diagrams':'Level 1 — All Detailed DFDs'}</h2><p>Click any card to open the step-by-step viewer.</p></div>`;
+  Object.entries(PERSONS).forEach(([pname,pdata])=>{
+    const col=pdata.color,gc=pdata.frs.length===4?'grid-4':'grid-3';
+    html+=`<div class="person-section"><div class="psec-label"><span style="color:${col}">${pname}</span><div class="psec-line" style="background:${col}33"></div><span style="font-size:10px;color:#5a7099">${pdata.frs.join(' · ')}</span></div><div class="grid ${gc}">`;
+    pdata.frs.forEach(id=>{
+      const fr=DATA[id],inner=miniSVG(id,level);
+      html+=`<div class="mini-card" style="border-color:${col}33;transition:border-color .2s,box-shadow .2s,transform .15s"
+        onmouseenter="this.style.borderColor='${col}';this.style.boxShadow='0 0 14px 2px ${col}22'"
+        onmouseleave="this.style.borderColor='${col}33';this.style.boxShadow='none'"
+        onclick="openFR('${id}',${level})">
+        <svg viewBox="0 0 800 440" style="width:100%;height:180px;display:block;background:#060d1f">${inner}</svg>
+        <div style="padding:6px 10px 7px;display:flex;align-items:center;gap:8px;border-top:1px solid ${col}22">
+          <span class="mini-id" style="background:${col}18;color:${col};border:1px solid ${col}44">${id}</span>
+          <span style="font-size:10px;font-weight:600;color:#dde6f0;flex:1">${fr.title}</span>
+          <span style="font-size:8.5px;color:${col}99">${fr.person}</span>
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  document.getElementById('all-view').innerHTML=html;
+}
+function openFR(id,level){
+  curPerson=DATA[id].person;curFR=id;curLevel=level;curStep=-1;
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.toggle('on',b.dataset.p===curPerson));
+  document.documentElement.style.setProperty('--ac',PCOL[curPerson]);
+  buildFRTabs();
+  document.getElementById('bl0').className=level===0?'on':'';
+  document.getElementById('bl1').className=level===1?'on':'';
+  setMode('single');updateHeader();renderIndividual(curFR,curLevel);renderPanel();
+}
+
+// ─── MODE ─────────────────────────────────────────────────────────────────────
+function setMode(mode){
+  curMode=mode;
+  const sv=document.getElementById('single-view'),av=document.getElementById('all-view'),fv=document.getElementById('final-view'),tb=document.getElementById('toolbar');
+  sv.style.display='none';av.style.display='none';fv.style.display='none';
+  ['btn-all0','btn-all1','btn-fin0','btn-fin1'].forEach(id=>document.getElementById(id).classList.remove('on'));
+  if(mode==='single'){sv.style.display='flex';tb.style.display='flex';renderIndividual(curFR,curLevel);}
+  else if(mode==='all0'||mode==='all1'){av.style.display='flex';tb.style.display='none';document.getElementById(`btn-${mode}`).classList.add('on');renderAllView(mode==='all0'?0:1);}
+  else if(mode==='fin0'||mode==='fin1'){
+    fv.style.display='flex';tb.style.display='none';
+    document.getElementById(`btn-${mode}`).classList.add('on');
+    curFinalMode=mode;curFinalPerson='Mostafa';curFinalStep=-1;
+    fvScale=1;fvTx=0;fvTy=0;
+    const isL0=mode==='fin0';
+    fvInitVB=isL0?FINAL_L0.vb:FL1_VB;
+    document.getElementById('fsh-title').textContent=isL0?'Final L0 — Step Guide':'Final L1 — Step Guide';
+    if(isL0)renderFinalL0(); else renderFinalL1();
+    renderFinalPanel();
+  }
+}
+function setLevel(l){
+  curLevel=l;curStep=-1;
+  document.getElementById('bl0').className=l===0?'on':'';
+  document.getElementById('bl1').className=l===1?'on':'';
+  updateHeader();renderIndividual(curFR,curLevel);renderPanel();
+}
+function setFR(id){
+  curFR=id;curStep=-1;
+  const col=PCOL[DATA[id].person];
+  document.querySelectorAll('.frtab').forEach(b=>{b.classList.toggle('on',b.dataset.fr===id);b.style.borderColor=b.dataset.fr===id?col:'';});
+  document.documentElement.style.setProperty('--ac',col);
+  updateHeader();renderIndividual(curFR,curLevel);renderPanel();
+}
+function setPerson(p){
+  curPerson=p;curFR=PERSONS[p].frs[0];curStep=-1;
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  document.documentElement.style.setProperty('--ac',PERSONS[p].color);
+  buildFRTabs();updateHeader();renderIndividual(curFR,curLevel);renderPanel();
+}
+function buildFRTabs(){
+  const col=PERSONS[curPerson].color;
+  document.getElementById('fr-tabs').innerHTML=PERSONS[curPerson].frs.map(id=>{
+    const on=id===curFR;
+    return`<button class="frtab${on?' on':''}" data-fr="${id}" style="${on?`border-color:${col};color:${col}`:''}" onclick="setFR('${id}')">${id}: ${DATA[id].title.split(' ').slice(0,2).join(' ')}</button>`;
+  }).join('');
+}
+function updateHeader(){
+  const fr=DATA[curFR];
+  document.getElementById('dtitle').textContent=`${curFR}: ${fr.title}`;
+  document.getElementById('dsub').textContent=`${curLevel===0?'Level 0 — Context':'Level 1 — Detailed DFD'}  ·  Assigned: ${fr.person}`;
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.ptab').forEach(b=>b.addEventListener('click',()=>setPerson(b.dataset.p)));
+initFVInteraction();
+buildFRTabs();updateHeader();renderIndividual(curFR,curLevel);renderPanel();
+
+</script>
+</body>
+</html>
